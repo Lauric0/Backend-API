@@ -8,7 +8,7 @@ package-lock.json
 
 /src/generated/prisma
 
-.agents
+.agents/skills/neon-postgres/
 
 .env
 

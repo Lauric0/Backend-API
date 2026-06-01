@@ -8,9 +8,18 @@ package-lock.json
 
 /src/generated/prisma
 
-.agents/
+.agents
 
 .env
 
-prisma/
+# Prisma
+.prisma/
+
+# Logs
+logs/
+*.log
+
+# OS
+.DS_Store
+
 

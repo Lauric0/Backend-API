@@ -1,5 +1,6 @@
 import { prisma } from "../config/database.js"
-import 'bcrypt'
+import bcrypt from 'bcrypt'
+import { generateToken } from "../utils/generateToken.js"
 
 
 const register = async (req,res)=>{
@@ -15,28 +16,82 @@ const register = async (req,res)=>{
             .json({error: 'User already exist with this email'})
     }
 
-    // Hash password
     const salt = await bcrypt.genSalt(10)
-    const hashedPassword = await bcrytpt.hash(password,salt) 
-    
-    // Create a password
+    const hashedPassword = await bcrypt.hash(password, salt)
+
     const user = await prisma.user.create({
         data:{
             name,
             email,
-            hashedPassword
+            password: hashedPassword
         }
     })
 
+    /// Generate the token
+    const token = generateToken(user.id)
+
     res.status(201).json({
-        status:"sucess",
+        status:"success",
         data:{
-            id:user.id,
-            name:name,
-            email:email,
+            user:{
+                id:user.id,
+                name:user.name,
+                email:user.email,
+                password:user.password
+            },
+            token
         }
     })
 }
 
+const login = async (req,res)=>{
 
-export default register;
+    const {email, password}=req.body
+
+    // Check if email exist in the table
+    const user = await prisma.user.findUnique({
+        where:{email:email}
+    })
+
+    if(!user){
+        return res.status(400).json({error:'User already exists with this email'})
+    }
+
+    // Verify the password
+
+    const isPassword = await bcrypt.compare(password, user.password)
+
+    if(!isPassword){
+        return res.status(401).json({
+            error: "Invalid email or password"
+        })
+    }
+
+    // Generate  the JWT Token
+    const token = generateToken(user.id, res)
+
+
+    res.status(201).json({
+        status:"success",
+        data:{
+            id:user.id,
+            name:user.name,
+            email:user.email,
+            password:user.password
+        },
+        token
+    })
+
+}
+
+const logout = (req,res)=>{
+    res.status(200).json({
+        status:"success",
+        message:"Log Out successfully",
+
+    })
+
+
+}
+
+export {register, login, logout};

@@ -10,13 +10,13 @@ const app = express()
 connectdb()
 
 //Body parsing middleware
-app.use(express.json()) // handle the json text
-app.use(express.urlencoded({extended:true}))
+app.use(express.json()) // handle the json text send throught the body
+app.use(express.urlencoded({extended:true})) // Converts html form content into json 
 
 
 // API Routes
 app.use('/home',userRoute)
-app.use("/auth",authRouter)
+app.use('/auth', authRouter)
 
 app.listen(PORT,()=>{
     console.log(`Server win the battle on port ${PORT}`)

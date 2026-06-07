@@ -1,20 +1,18 @@
-import jwt from "jsonwebtoken"
-import 'dotenv/config'
+import jwt from 'jsonwebtoken'
 
-
-export const generateToken = (userId)=>{
-    const payload = { id:userId }
-    const token = jwt.sign(payload,process.env.JWT_SECRET,{
-        expireIn:process.env.JWT_EXPIRES_IN || "7d",
-
-    })
-
-    res.cookie("jwt", token,{
-        httpOnly:true,
-        secure:process.env.NODE_ENV === "production",
-        sameSite:"strict",
+const generateToken= async (userId, res)=>{
+    const payload = { id:userId }; // The id is an object
+    const token = jwt.sign(payload, process.env.JWT_SECRET,
+        {expiresIn: process.env.JWT_EXPIRES_IN || "7d"}
+    )
+    res.cookie("jwt",token,{
+        httpOnly:true, // le cookie ne peux être lu par js ()
+        secure:process.env.NODE_ENV === "production", // le fichier est lu uniquement par https
+        sameSite:"strict", // Protège contre CSRF
         maxAge: 1000 * 60 * 60 * 24 * 7
     })
 
-    return token;
+    return token
 }
+
+export {generateToken};

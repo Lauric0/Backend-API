@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --exec \"node --experimental-strip-types\" ./app.js"
+    "dev": "nodemon --exec \"node --experimental-strip-types\" ./app.js",
+    "seed:movie": "node ./prisma/seed.js"
   },
   "keywords": [],
   "author": "",
@@ -22,6 +23,7 @@
     "openssl": "^2.0.0"
   },
   "devDependencies": {
+    "@types/node": "^26.0.0",
     "nodemon": "^3.1.14",
     "prisma": "^7.8.0"
   }

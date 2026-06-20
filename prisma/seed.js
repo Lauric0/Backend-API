@@ -1,8 +1,13 @@
-import { PrismaClient } from "@prisma/client";
+import 'dotenv/config'
+import { PrismaNeon } from "@prisma/adapter-neon";
+import { PrismaClient } from "../src/generated/prisma/client.js";
 
-const prisma = new PrismaClient();
 
-const userId = "3f7d147b-9a69-462c-8528-d8153309d075";
+const adapter = new PrismaNeon({ connectionString: process.env.DATABASE_URL})
+
+const prisma = new PrismaClient({ adapter });
+
+const userId = "31267c4b-3a84-484d-aff8-d1ccdf31e724";
 
 const movies = [
   {
@@ -100,3 +105,23 @@ const movies = [
     createdBy: userId,
   },
 ];
+
+
+const main = async()=>{
+  console.log('seeding movies ...');
+  for(const movie of movies){
+    await prisma.movie.create({
+      data:movie
+    })
+  }
+  console.log('Seeding completed');
+}
+
+main()
+  .catch((err)=>{
+    console.log(err)
+    process.exit(1)
+  })
+  .finally(async ()=>{
+    await prisma.$disconnect()
+  })

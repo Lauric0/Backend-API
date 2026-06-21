@@ -35,8 +35,8 @@ export const authMiddleware = async(req,res,next)=>{
         next()
         
     } catch (error) {
-        res.status(400).json({
-            message:'There is a mistake in the request'
+        res.status(401).json({
+            error:'Not authorized, token failed'
         })
     }
 }

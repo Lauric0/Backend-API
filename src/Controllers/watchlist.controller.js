@@ -47,4 +47,8 @@ const addToWatchlist = async (req,res)=>{
     })
 }
 
+
+const removeFromWatchlist= async (req,res)=>{
+    user 
+}
 export { addToWatchlist }

@@ -21,9 +21,8 @@ app.use(express.urlencoded({extended:true})) // Converts html form content into 
 // API Routes
 app.use('/home',userRoute)
 app.use('/auth', authRouter)
-app.use(authMiddleware)
 app.use('/watchlist',watchlistRouter)
 
-app.listen(PORT,()=>{
+app.listen(PORT || 5001,()=>{
     console.log(`Server win the battle on port ${PORT}`)
 })
